@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Météo 3000 - La météo du futur</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <script src="js/script.js" defer></script>
+    <script src="js/meteo.js" defer></script>
+    <style>
+        :root {
+            --primary-color: #4a90a4;
+            --secondary-color: #f0f7fa;
+            --accent-color: #2c5f72;
+            --text-color: #333;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, #ffffff 100%);
+            min-height: 100vh;
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-weight: 300;
+        }
+
+        header i {
+            font-size: 2.5rem;
+            margin-right: 0.5rem;
+        }
+
+        .form-container {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+        }
+
+        .form-select {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(74, 144, 164, 0.25);
+        }
+
+        label {
+            font-weight: 500;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .weather-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem 1rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
+        }
+
+        .weather-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .weather-card h3 {
+            color: var(--accent-color);
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+
+        .weather-card img {
+            max-width: 80px;
+            margin: 0.5rem 0;
+        }
+
+        .weather-card .temp {
+            font-size: 0.95rem;
+            color: #555;
+        }
+
+        .weather-card .temp-min {
+            color: var(--primary-color);
+        }
+
+        .weather-card .temp-max {
+            color: #e67e22;
+        }
+
+        #main h2 {
+            color: var(--accent-color);
+            font-weight: 300;
+        }
+
+        footer {
+            margin-top: auto;
+            background: var(--accent-color);
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+        }
+
+        footer a {
+            color: #a8d5e5;
+        }
+
+        footer a:hover {
+            color: white;
+        }
+
+        .loading {
+            display: none;
+            color: var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            header i {
+                font-size: 1.8rem;
+            }
+
+            .weather-card {
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container text-center">
+            <h1><i class="bi bi-cloud-sun"></i> Météo 3000</h1>
+            <p class="mb-0 mt-2">La météo du futur</p>
+        </div>
+    </header>
+
+    <div class="container flex-grow-1">
+        <div class="form-container">
+            <form>
+                <div class="row">
+                    <div class="col-md-6 mb-3 mb-md-0">
+                        <label for="departement"><i class="bi bi-geo-alt"></i> Département</label>
+                        <select class="form-select" id="departement">
+                            <option selected disabled>Choisir un département</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="commune"><i class="bi bi-building"></i> Commune</label>
+                        <select class="form-select" id="commune">
+                            <option selected disabled>Choisir une commune</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <main id="main">
+            <div class="text-center text-muted py-5">
+                <i class="bi bi-cloud-sun" style="font-size: 4rem;"></i>
+                <p class="mt-3">Sélectionnez un département et une commune pour afficher la météo</p>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p class="mb-0">Données fournies par <a href="https://prevision-meteo.ch" target="_blank">prevision-meteo.ch</a> | 
+            API Géo <a href="https://geo.api.gouv.fr/" target="_blank">geo.api.gouv.fr</a></p>
+        </div>
+    </footer>
+
+</body>
+
+</html>
